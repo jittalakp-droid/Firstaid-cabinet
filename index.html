@@ -7,9 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    </style>
+    <style> body { font-family: 'Plus Jakarta Sans', sans-serif; } </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
@@ -17,17 +15,17 @@
     <header class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 flex-shrink-0">
+                <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 </div>
                 <div>
-                    <h1 class="text-sm sm:text-lg font-bold text-white tracking-wide">ตู้ยาอาคารอำนวยการ ชั้น 2</h1>
-                    <p class="text-[10px] sm:text-xs text-slate-400">ระบบการเบิกจ่ายยาและเวชภัณฑ์ของโรงงานผลิตน้ำมหาสวัสดิ์</p>
+                    <h1 class="text-sm sm:text-lg font-bold text-white">ตู้ยาอาคารอำนวยการ ชั้น 2</h1>
+                    <p class="text-[10px] sm:text-xs text-slate-400">ระบบการเบิกจ่ายยาและเวชภัณฑ์ โรงงานผลิตน้ำมหาสวัสดิ์</p>
                 </div>
             </div>
             <div class="flex items-center space-x-1.5">
-                <button onclick="switchView('user')" id="btnUser" class="px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg bg-blue-600 text-white transition shadow-md shadow-blue-600/20 flex items-center gap-1">ผู้ใช้</button>
-                <button onclick="checkAdminAccess()" id="btnAdmin" class="px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center gap-1">แอดมิน</button>
+                <button onclick="switchView('user')" id="btnUser" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-blue-600 text-white">ผู้ใช้</button>
+                <button onclick="checkAdminAccess()" id="btnAdmin" class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-800 text-slate-300">แอดมิน</button>
             </div>
         </div>
     </header>
@@ -37,72 +35,60 @@
         
         <!-- USER VIEW -->
         <div id="userView" class="space-y-6">
-            <div class="bg-gradient-to-r from-blue-900/40 to-slate-800/60 border border-blue-500/20 rounded-2xl p-5 sm:p-8 shadow-xl backdrop-blur-md">
-                <div class="max-w-2xl">
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30">การเบิกจ่ายยาและเวชภัณฑ์</span>
-                    <h2 class="text-xl sm:text-3xl font-bold text-white mt-2">การเบิกจ่ายยาและเวชภัณฑ์ตู้ยาชั้น 2 อาคารอำนวยการ</h2>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1">กรอกข้อมูลรายละเอียดการเบิกด้านล่างให้ครบถ้วน</p>
-                </div>
-
+            <div class="bg-gradient-to-r from-blue-900/40 to-slate-800/60 border border-blue-500/20 rounded-2xl p-5 sm:p-8 shadow-xl">
+                <h2 class="text-xl sm:text-3xl font-bold text-white">การเบิกจ่ายยาและเวชภัณฑ์ตู้ยาชั้น 2</h2>
                 <form id="borrowForm" onsubmit="handleBorrow(event)" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">ชื่อ-นามสกุล ผู้เบิก</label>
-                        <input type="text" id="borrowerName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="เช่น คุณกชพร ศรีสุข">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">ชื่อ-นามสกุล ผู้เบิก</label>
+                        <input type="text" id="borrowerName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">ตำแหน่ง</label>
-                        <input type="text" id="borrowerPosition" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="เช่น นักวิเคราะห์นโยบายและแผน">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">ตำแหน่ง</label>
+                        <input type="text" id="borrowerPosition" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
                     </div>
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">แผนก / หน่วยงาน</label>
-                        <select id="borrowerDept" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                            <option value="">-- เลือกแผนก / หน่วยงาน --</option>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">แผนก</label>
+                        <select id="borrowerDept" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
+                            <option value="">-- เลือกแผนก --</option>
                             <option value="ฝ่ายทรัพยากรบุคคล (HR)">ฝ่ายทรัพยากรบุคคล (HR)</option>
                             <option value="ฝ่ายอาคารสถานที่และความปลอดภัย">ฝ่ายอาคารสถานที่และความปลอดภัย</option>
                             <option value="ฝ่ายบริหารงานทั่วไป">ฝ่ายบริหารงานทั่วไป</option>
-                            <option value="ฝ่ายบัญชีและการเงิน">ฝ่ายบัญชีและการเงิน</option>
                             <option value="ฝ่ายเทคโนโลยีสารสนเทศ (IT)">ฝ่ายเทคโนโลยีสารสนเทศ (IT)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">เลือกรายการยา / เวชภัณฑ์</label>
-                        <select id="borrowItem" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">เลือกรายการยา</label>
+                        <select id="borrowItem" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
                             <option value="">-- เลือกรายการ --</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">จำนวนที่เบิก</label>
-                        <input type="number" id="borrowQty" min="1" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="ระบุจำนวน">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">จำนวนที่เบิก</label>
+                        <input type="number" id="borrowQty" min="1" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
                     </div>
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">อาการ / เหตุผลในการเบิก</label>
-                        <input type="text" id="borrowReason" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="เช่น อาการปวดหัวระหว่างทำงาน, มีดบาดนิ้ว">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">อาการ / เหตุผล</label>
+                        <input type="text" id="borrowReason" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white">
                     </div>
-                    <div class="sm:col-span-2 pt-2">
-                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-2">
-                            ยืนยันการเบิกจ่าย
-                        </button>
+                    <div class="sm:col-span-2">
+                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl">ยืนยันการเบิกจ่าย</button>
                     </div>
                 </form>
             </div>
 
-            <!-- User Stock Table Display -->
-            <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-4 sm:p-6 shadow-xl">
-                <h3 class="text-base sm:text-lg font-bold text-white mb-4">รายการยาและเวชภัณฑ์ในตู้ยาชั้น 2 อาคารอำนวยการ (พร้อมเบิก)</h3>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-4 sm:p-6">
+                <h3 class="text-base font-bold text-white mb-4">รายการยาในตู้ยาชั้น 2 (พร้อมเบิก)</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs sm:text-sm text-slate-300">
-                        <thead class="bg-slate-900 uppercase text-slate-400 border-b border-slate-700">
+                        <thead class="bg-slate-900 uppercase text-slate-400">
                             <tr>
-                                <th class="py-3 px-3">ชื่อรายการ</th>
-                                <th class="py-3 px-3">หมวดหมู่</th>
-                                <th class="py-3 px-3 text-center">คงเหลือ (ตู้ชั้น 2)</th>
-                                <th class="py-3 px-3">หน่วย</th>
+                                <th class="py-3 px-3">ชื่อยา</th>
+                                <th class="py-3 px-3">ล็อต</th>
+                                <th class="py-3 px-3 text-center">คงเหลือในตู้</th>
                                 <th class="py-3 px-3">วันหมดอายุ</th>
                             </tr>
                         </thead>
-                        <tbody id="userInventoryTable" class="divide-y divide-slate-700/50">
-                            <!-- Populated by JS -->
-                        </tbody>
+                        <tbody id="userInventoryTable" class="divide-y divide-slate-700/50"></tbody>
                     </table>
                 </div>
             </div>
@@ -110,135 +96,94 @@
 
         <!-- ADMIN VIEW -->
         <div id="adminView" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-md">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 sm:pb-6 border-b border-slate-700">
-                    <div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-400 border border-purple-500/30">Admin Panel</span>
-                        <h2 class="text-lg sm:text-2xl font-bold text-white mt-1">ระบบจัดการหลังบ้านตู้ยา</h2>
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 sm:p-6 shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-700">
+                    <h2 class="text-lg sm:text-2xl font-bold text-white">ระบบจัดการหลังบ้านตู้ยา</h2>
+                    <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold py-2 px-4 rounded-xl">+ เพิ่มยาเข้าคลังกลาง</button>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 my-4">
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-3">
+                        <p class="text-xs text-slate-400">รายการยาทั้งหมด</p>
+                        <h3 id="statTotalItems" class="text-2xl font-bold text-white mt-1">0</h3>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                            + เพิ่มรายการยาใหม่
-                        </button>
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-3">
+                        <p class="text-xs text-slate-400">สต็อกตู้ยาชั้น 2 รวม</p>
+                        <h3 id="statCabinetTotal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 rounded-xl p-3">
+                        <p class="text-xs text-slate-400">สต็อกคลังกลางรวม</p>
+                        <h3 id="statCentralTotal" class="text-2xl font-bold text-blue-400 mt-1">0</h3>
                     </div>
                 </div>
 
-                <!-- TAB: OVERVIEW -->
-                <div id="adminSectionOverview" class="pt-6 space-y-6">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-3">
-                            <p class="text-xs text-slate-400">รายการยาทั้งหมด</p>
-                            <h3 id="statTotalItems" class="text-2xl font-bold text-white mt-1">0</h3>
-                        </div>
-                        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-3">
-                            <p class="text-xs text-slate-400">สต็อกตู้ยาชั้น 2 รวม</p>
-                            <h3 id="statCabinetTotal" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
-                        </div>
-                        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-3">
-                            <p class="text-xs text-slate-400">สต็อกคลังกลางรวม</p>
-                            <h3 id="statCentralTotal" class="text-2xl font-bold text-blue-400 mt-1">0</h3>
-                        </div>
-                    </div>
-
-                    <!-- ตารางแสดงรายการยาหลังบ้าน -->
-                    <div class="bg-slate-900/40 border border-slate-700/60 rounded-2xl p-4 mt-6">
-                        <h3 class="text-base font-bold text-white mb-4">รายการยาในระบบทั้งหมด</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
-                                <thead class="bg-slate-900 uppercase text-slate-400 border-b border-slate-700">
-                                    <tr>
-                                        <th class="py-3 px-3">รหัสยา</th>
-                                        <th class="py-3 px-3">ชื่อรายการยา</th>
-                                        <th class="py-3 px-3">ล็อต (Lot)</th>
-                                        <th class="py-3 px-3 text-center">จำนวนคงเหลือ</th>
-                                        <th class="py-3 px-3">วันหมดอายุ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminInventoryTable" class="divide-y divide-slate-700/50">
-                                    <!-- Populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                        <thead class="bg-slate-900 uppercase text-slate-400">
+                            <tr>
+                                <th class="py-3 px-3">รหัส / ชื่อยา</th>
+                                <th class="py-3 px-3">ล็อต</th>
+                                <th class="py-3 px-3 text-center">ในตู้ชั้น 2</th>
+                                <th class="py-3 px-3 text-center">คลังกลาง</th>
+                                <th class="py-3 px-3 text-center">จัดการ (ย้ายมาตู้)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminInventoryTable" class="divide-y divide-slate-700/50"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL: ADD NEW DRUG -->
+    <!-- MODAL ADD DRUG -->
     <div id="drugModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <h3 class="text-base sm:text-lg font-bold text-white">เพิ่มรายการยาใหม่ (ลง Google Sheet)</h3>
-            <form id="drugForm" onsubmit="saveDrug(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">รหัสยา (Drug ID)</label>
-                    <input type="text" id="drugIdInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น DRG001">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-3">
+            <h3 class="text-base font-bold text-white">เพิ่มยาใหม่เข้าคลังกลาง</h3>
+            <form onsubmit="saveDrug(event)" class="space-y-3">
+                <input type="text" id="dId" required placeholder="รหัสยา เช่น DRG001" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                <input type="text" id="dName" required placeholder="ชื่อยา" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                <input type="text" id="dLot" required placeholder="เลขล็อต (Lot No.)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" id="dCabinet" min="0" value="0" required placeholder="จำนวนใส่ตู้" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                    <input type="number" id="dCentral" min="0" value="0" required placeholder="จำนวนคลังกลาง" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">ชื่อรายการยา / เวชภัณฑ์</label>
-                    <input type="text" id="drugNameInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น พาราเซตามอล 500 มก.">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">เลขที่ล็อต (Lot No.)</label>
-                    <input type="text" id="drugLotInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น LOT2026-01">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">จำนวนเริ่มต้น</label>
-                        <input type="number" id="drugQtyInput" min="1" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">ขั้นต่ำเตือน (Min Stock)</label>
-                        <input type="number" id="drugMinInput" min="1" value="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">วันหมดอายุ</label>
-                    <input type="date" id="drugExpiryInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                </div>
+                <input type="date" id="dExpiry" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeDrugModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold text-slate-300">ยกเลิก</button>
-                    <button type="submit" id="saveDrugBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white">บันทึก</button>
+                    <button type="button" onclick="closeDrugModal()" class="px-4 py-2 bg-slate-700 rounded-xl text-xs text-white">ยกเลิก</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 rounded-xl text-xs text-white">บันทึก</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JS Logic -->
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
-
         let inventory = [];
         let adminPassword = '1234';
 
-        window.onload = function() {
-            loadData();
-        };
+        window.onload = function() { loadData(); };
 
         async function loadData() {
             try {
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=getStock`);
-                inventory = await response.json();
+                const res = await fetch(`${APPS_SCRIPT_URL}?action=getStock`);
+                inventory = await res.json();
                 renderUserInventory();
                 populateBorrowDropdown();
                 renderAdminOverview();
-            } catch (error) {
-                console.error('Error loading data:', error);
-            }
+            } catch (err) { console.error(err); }
         }
 
         function switchView(view) {
             document.getElementById('userView').classList.toggle('hidden', view !== 'user');
             document.getElementById('adminView').classList.toggle('hidden', view !== 'admin');
+            if(view === 'admin') renderAdminOverview(); // โหลดหน้าแอดมินทันทีที่สลับ
         }
 
         function checkAdminAccess() {
             Swal.fire({
-                title: 'เข้าสู่ระบบแอดมิน',
-                input: 'password',
-                background: '#1e293b', color: '#fff', confirmButtonColor: '#2563eb',
-                showCancelButton: true
+                title: 'เข้าสู่ระบบแอดมิน', input: 'password',
+                background: '#1e293b', color: '#fff', confirmButtonColor: '#2563eb', showCancelButton: true
             }).then((res) => {
                 if (res.isConfirmed && res.value === adminPassword) {
                     switchView('admin');
@@ -250,136 +195,98 @@
 
         function renderUserInventory() {
             const tbody = document.getElementById('userInventoryTable');
-            tbody.innerHTML = '';
-            inventory.forEach(item => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-800/40">
-                        <td class="py-3 px-3 font-medium text-white">${item.name} (Lot: ${item.lotNo})</td>
-                        <td class="py-3 px-3 text-slate-400">${item.id}</td>
-                        <td class="py-3 px-3 text-center font-bold text-emerald-400">${item.stock}</td>
-                        <td class="py-3 px-3">-</td>
-                        <td class="py-3 px-3 text-slate-400">${item.expiryDate}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        function renderAdminOverview() {
-            document.getElementById('statTotalItems').innerText = inventory.length;
-            const totalStock = inventory.reduce((sum, i) => sum + i.stock, 0);
-            document.getElementById('statCabinetTotal').innerText = totalStock;
-            document.getElementById('statCentralTotal').innerText = "-";
-
-            const tbody = document.getElementById('adminInventoryTable');
-            tbody.innerHTML = '';
-            inventory.forEach(item => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-800/40">
-                        <td class="py-3 px-3 font-medium text-white">${item.id}</td>
-                        <td class="py-3 px-3 text-white">${item.name}</td>
-                        <td class="py-3 px-3 text-slate-400">${item.lotNo}</td>
-                        <td class="py-3 px-3 text-center font-bold text-emerald-400">${item.stock}</td>
-                        <td class="py-3 px-3 text-slate-400">${item.expiryDate}</td>
-                    </tr>
-                `;
-            });
+            tbody.innerHTML = inventory.map(i => `
+                <tr class="hover:bg-slate-800/40">
+                    <td class="py-3 px-3 text-white font-medium">${i.name}</td>
+                    <td class="py-3 px-3 text-slate-400">Lot: ${i.lotNo}</td>
+                    <td class="py-3 px-3 text-center font-bold text-emerald-400">${i.cabinetQty}</td>
+                    <td class="py-3 px-3 text-slate-400">${i.expiryDate}</td>
+                </tr>
+            `).join('');
         }
 
         function populateBorrowDropdown() {
             const select = document.getElementById('borrowItem');
-            select.innerHTML = '<option value="">-- เลือกรายการ --</option>';
-            inventory.forEach(item => {
-                if (item.stock > 0) {
-                    select.innerHTML += `<option value="${item.id}|${item.lotNo}">${item.name} (Lot: ${item.lotNo} | เหลือ: ${item.stock})</option>`;
-                }
-            });
+            select.innerHTML = '<option value="">-- เลือกรายการ --</option>' + inventory.map(i => 
+                i.cabinetQty > 0 ? `<option value="${i.id}|${i.lotNo}">${i.name} (Lot: ${i.lotNo} | ในตู้: ${i.cabinetQty})</option>` : ''
+            ).join('');
         }
 
-        function openAddDrugModal() {
-            document.getElementById('drugForm').reset();
-            document.getElementById('drugModal').classList.remove('hidden');
+        function renderAdminOverview() {
+            document.getElementById('statTotalItems').innerText = inventory.length;
+            document.getElementById('statCabinetTotal').innerText = inventory.reduce((a, b) => a + b.cabinetQty, 0);
+            document.getElementById('statCentralTotal').innerText = inventory.reduce((a, b) => a + b.centralQty, 0);
+
+            const tbody = document.getElementById('adminInventoryTable');
+            tbody.innerHTML = inventory.map(i => `
+                <tr class="hover:bg-slate-800/40">
+                    <td class="py-3 px-3 text-white font-medium">${i.name}<br><span class="text-xs text-slate-400">ID: ${i.id}</span></td>
+                    <td class="py-3 px-3 text-slate-300">${i.lotNo}</td>
+                    <td class="py-3 px-3 text-center font-bold text-emerald-400">${i.cabinetQty}</td>
+                    <td class="py-3 px-3 text-center font-bold text-blue-400">${i.centralQty}</td>
+                    <td class="py-3 px-3 text-center">
+                        <button onclick="transferDrug('${i.id}', '${i.lotNo}', ${i.centralQty})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-semibold">ย้ายเข้าตู้</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function closeDrugModal() {
-            document.getElementById('drugModal').classList.add('hidden');
-        }
+        function openAddDrugModal() { document.getElementById('drugModal').classList.remove('hidden'); }
+        function closeDrugModal() { document.getElementById('drugModal').classList.add('hidden'); }
 
         async function saveDrug(e) {
             e.preventDefault();
-            const btn = document.getElementById('saveDrugBtn');
-            btn.disabled = true;
-            btn.innerText = 'กำลังบันทึก...';
-
             const payload = {
                 action: 'add_drug',
-                drugId: document.getElementById('drugIdInput').value.trim(),
-                drugName: document.getElementById('drugNameInput').value.trim(),
-                lotNo: document.getElementById('drugLotInput').value.trim(),
-                expiryDate: document.getElementById('drugExpiryInput').value,
-                quantity: parseInt(document.getElementById('drugQtyInput').value),
-                minStock: parseInt(document.getElementById('drugMinInput').value)
+                drugId: document.getElementById('dId').value,
+                drugName: document.getElementById('dName').value,
+                lotNo: document.getElementById('dLot').value,
+                cabinetQty: parseInt(document.getElementById('dCabinet').value),
+                centralQty: parseInt(document.getElementById('dCentral').value),
+                expiryDate: document.getElementById('dExpiry').value,
+                minStock: 5
             };
+            await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+            Swal.fire({ icon: 'success', title: 'เพิ่มยาสำเร็จ', background: '#1e293b', color: '#fff', timer: 1200, showConfirmButton: false });
+            closeDrugModal();
+            loadData();
+        }
 
-            try {
-                await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                });
+        async function transferDrug(id, lot, maxCentral) {
+            const { value: qty } = await Swal.fire({
+                title: 'ย้ายยาจากคลังกลางใส่ตู้ชั้น 2',
+                text: `คลังกลางเหลืออยู่: ${maxCentral} ชิ้น`,
+                input: 'number',
+                inputAttributes: { min: 1, max: maxCentral },
+                background: '#1e293b', color: '#fff', confirmButtonColor: '#059669', showCancelButton: true
+            });
 
-                Swal.fire({ icon: 'success', title: 'เพิ่มยาลง Google Sheet สำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
-                closeDrugModal();
-                loadData(); // โหลดข้อมูลใหม่จาก Google Sheets
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire({ icon: 'error', title: 'ไม่สามารถบันทึกได้', background: '#1e293b', color: '#fff' });
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'บันทึก';
+            if (qty && parseInt(qty) > 0) {
+                const payload = { action: 'transfer_drug', drugId: id, lotNo: lot, qty: parseInt(qty) };
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                Swal.fire({ icon: 'success', title: 'ย้ายยาเข้าตู้สำเร็จ', background: '#1e293b', color: '#fff', timer: 1200, showConfirmButton: false });
+                loadData();
             }
         }
 
         async function handleBorrow(e) {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = 'กำลังบันทึก...';
-
-            const selectedVal = document.getElementById('borrowItem').value.split('|');
-            const targetId = selectedVal[0];
-            const targetLot = selectedVal[1];
-            const targetItem = inventory.find(i => i.id === targetId && i.lotNo === targetLot);
+            const selected = document.getElementById('borrowItem').value.split('|');
+            const target = inventory.find(i => i.id === selected[0] && i.lotNo === selected[1]);
 
             const payload = {
                 action: 'disburse_drug',
-                drugId: targetId,
-                drugName: targetItem.name,
-                lotNo: targetLot,
-                expiryDate: targetItem.expiryDate,
+                drugId: target.id, drugName: target.name, lotNo: target.lotNo, expiryDate: target.expiryDate,
                 qty: parseInt(document.getElementById('borrowQty').value),
                 requester: document.getElementById('borrowerName').value + ' (' + document.getElementById('borrowerPosition').value + ')',
                 department: document.getElementById('borrowerDept').value,
                 note: document.getElementById('borrowReason').value
             };
 
-            try {
-                await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                });
-
-                Swal.fire({ icon: 'success', title: 'เบิกยาและตัดสต๊อกสำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
-                document.getElementById('borrowForm').reset();
-                loadData(); // โหลดข้อมูลสต๊อกล่าสุดจาก Google Sheet
-            } catch (error) {
-                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', background: '#1e293b', color: '#fff' });
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'ยืนยันการเบิกจ่าย';
-            }
+            await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+            Swal.fire({ icon: 'success', title: 'เบิกยาสำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
+            document.getElementById('borrowForm').reset();
+            loadData();
         }
     </script>
 </body>
