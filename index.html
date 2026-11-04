@@ -24,7 +24,6 @@
                 </div>
             </div>
             
-            <!-- เมนูด้านบนขวา -->
             <div class="flex items-center space-x-2">
                 <button onclick="switchTab('dashboard')" id="tabDashboard" class="px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-blue-600 text-white shadow-md shadow-blue-600/20 transition">ภาพรวม Dashboard</button>
                 <button onclick="switchTab('borrow')" id="tabBorrow" class="px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition border border-slate-300">ฟอร์มเบิกยา</button>
@@ -38,7 +37,6 @@
         
         <!-- 1. DASHBOARD VIEW -->
         <div id="dashboardView" class="space-y-6">
-            <!-- Welcome Banner -->
             <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-xl">
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">Cloud Sync Active</span>
                 <h2 class="text-xl sm:text-2xl font-bold mt-2">ยินดีต้อนรับสู่ระบบบริหารจัดการตู้ยาอาคารอำนวยการ ชั้น 2</h2>
@@ -67,11 +65,11 @@
 
                 <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-500">ยอดเบิกจ่ายวันนี้</p>
-                        <h3 class="text-2xl font-bold text-amber-600 mt-1">0 ชิ้น</h3>
-                        <span class="text-[11px] text-amber-500">รายการวันนี้</span>
+                        <p class="text-xs text-slate-500">ยาใกล้หมดอายุ (&le; 30 วัน)</p>
+                        <h3 id="dashExpiringSoon" class="text-2xl font-bold text-amber-600 mt-1">0</h3>
+                        <span class="text-[11px] text-amber-500">ต้องตรวจสอบล็อตยา</span>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 text-xl">📦</div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 text-xl">⏳</div>
                 </div>
 
                 <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex items-center justify-between">
@@ -86,16 +84,15 @@
 
             <!-- Dashboard Tables Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- รายการใกล้หมด -->
+                <!-- รายการใกล้หมด / ใกล้หมดอายุ -->
                 <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-slate-900 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> รายการใกล้หมด (ต้องเติมเข้าตู้)
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> แจ้งเตือน: สต็อกใกล้หมด & ใกล้หมดอายุ
                         </h3>
-                        <button onclick="switchTab('admin')" class="text-xs text-blue-600 hover:underline font-semibold">จัดการสต็อก</button>
                     </div>
                     <div id="dashAlertList" class="space-y-2">
-                        <p class="text-xs text-slate-400 text-center py-4">ยอดสต็อกปกติทุกรายการ</p>
+                        <p class="text-xs text-slate-400 text-center py-4">ยอดสต็อกและวันหมดอายุปกติทุกรายการ</p>
                     </div>
                 </div>
 
@@ -278,7 +275,7 @@
 
     <!-- JS Logic -->
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVjE3sPcv3muM6amhm5pIgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxlVtLcBbuk4YQ/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
         
         let inventory = [];
         let adminPassword = localStorage.getItem('firstaid_admin_pass') || '1234';
@@ -345,6 +342,17 @@
             document.getElementById('dashLowStock').innerText = lowStockCount;
             document.getElementById('dashCabinetTotal').innerText = inventory.reduce((a, b) => a + b.cabinetQty, 0);
 
+            const today = new Date();
+            let expiringCount = 0;
+            inventory.forEach(i => {
+                if(i.expiryDate && i.expiryDate !== '-') {
+                    const exp = new Date(i.expiryDate);
+                    const diffDays = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+                    if(diffDays <= 30) expiringCount++;
+                }
+            });
+            document.getElementById('dashExpiringSoon').innerText = expiringCount;
+
             // ตารางย่อในหน้า Dashboard
             const dashTable = document.getElementById('dashInventoryTable');
             if(inventory.length === 0) {
@@ -360,18 +368,46 @@
                 `).join('');
             }
 
-            // รายการใกล้หมดใน Dashboard
+            // รายการแจ้งเตือนใกล้หมด & ใกล้หมดอายุใน Dashboard
             const dashAlertList = document.getElementById('dashAlertList');
+            let alertHtml = '';
+            
             const lowStockItems = inventory.filter(i => i.cabinetQty <= (i.minStock || 3));
-            if(lowStockItems.length === 0) {
-                dashAlertList.innerHTML = `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-800 text-xs flex items-center gap-2">✅ ยอดสต็อกปกติทุกรายการ ไม่มีรายการใกล้หมด</div>`;
-            } else {
-                dashAlertList.innerHTML = lowStockItems.map(i => `
+            lowStockItems.forEach(i => {
+                alertHtml += `
                     <div class="bg-rose-50 border border-rose-200 rounded-xl p-3 flex justify-between items-center text-rose-900 text-xs">
-                        <div><b>${i.name}</b> (Lot: ${i.lotNo}) เหลือเพียง <b>${i.cabinetQty} ชิ้น</b></div>
-                        <button onclick="switchTab('admin')" class="bg-rose-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold">เติมสต็อก</button>
+                        <div><b>[สต็อกใกล้หมด]</b> ${i.name} (Lot: ${i.lotNo}) เหลือเพียง <b>${i.cabinetQty} ชิ้น</b></div>
+                        <button onclick="switchTab('admin')" class="bg-rose-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap">จัดการ</button>
                     </div>
-                `).join('');
+                `;
+            });
+
+            inventory.forEach(i => {
+                if(i.expiryDate && i.expiryDate !== '-') {
+                    const exp = new Date(i.expiryDate);
+                    const diffDays = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+                    if(diffDays <= 30 && diffDays >= 0) {
+                        alertHtml += `
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex justify-between items-center text-amber-900 text-xs">
+                                <div><b>[ใกล้หมดอายุ]</b> ${i.name} (Lot: ${i.lotNo}) อีก <b>${diffDays} วัน</b> (${i.expiryDate})</div>
+                                <button onclick="switchTab('admin')" class="bg-amber-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap">ตรวจสอบ</button>
+                            </div>
+                        `;
+                    } else if(diffDays < 0) {
+                        alertHtml += `
+                            <div class="bg-slate-100 border border-slate-300 rounded-xl p-3 flex justify-between items-center text-slate-700 text-xs">
+                                <div><b>[หมดอายุแล้ว]</b> ${i.name} (Lot: ${i.lotNo}) ตั้งแต่ ${i.expiryDate}</div>
+                                <button onclick="switchTab('admin')" class="bg-slate-600 text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap">จัดการ</button>
+                            </div>
+                        `;
+                    }
+                }
+            });
+
+            if(alertHtml === '') {
+                dashAlertList.innerHTML = `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-800 text-xs flex items-center gap-2">✅ ยอดสต็อกและวันหมดอายุปกติทุกรายการ</div>`;
+            } else {
+                dashAlertList.innerHTML = alertHtml;
             }
         }
 
