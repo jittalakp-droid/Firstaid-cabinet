@@ -106,10 +106,7 @@
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">Admin Panel</span>
                         <h2 class="text-xl sm:text-2xl font-bold text-white mt-1">ระบบจัดการหลังบ้าน</h2>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="openChangePasswordModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition border border-slate-700">เปลี่ยนรหัสผ่าน</button>
-                        <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-lg shadow-blue-600/20">+ เพิ่มยาใหม่</button>
-                    </div>
+                    <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-lg shadow-blue-600/20">+ เพิ่มยาใหม่</button>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6">
@@ -189,11 +186,10 @@
 
     <!-- JS Logic -->
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVjE3sPcv3muM6amhm5pIgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxlVtLcBbuk4YQ/exec";
         
         let inventory = [];
-        // โหลดรหัสผ่านแอดมินจาก localStorage ถ้าไม่มีให้ใช้ '1234' เป็นค่าเริ่มต้น
-        let adminPassword = localStorage.getItem('firstaid_admin_pass') || '1234';
+        let adminPassword = '1234';
 
         window.onload = function() { loadData(); };
 
@@ -228,49 +224,6 @@
                     Swal.fire({ icon: 'error', title: 'รหัสผ่านไม่ถูกต้อง', background: '#090d16', color: '#fff' });
                 }
             });
-        }
-
-        // --- ระบบเปลี่ยนรหัสผ่านแอดมิน ---
-        async function openChangePasswordModal() {
-            const { value: formValues } = await Swal.fire({
-                title: 'เปลี่ยนรหัสผ่านแอดมิน',
-                background: '#090d16',
-                color: '#fff',
-                html:
-                    '<input type="password" id="oldPass" class="swal2-input" placeholder="รหัสผ่านเดิม" style="background:#1e293b; color:#fff; border:1px solid #334155;">' +
-                    '<input type="password" id="newPass" class="swal2-input" placeholder="รหัสผ่านใหม่" style="background:#1e293b; color:#fff; border:1px solid #334155;">' +
-                    '<input type="password" id="confirmPass" class="swal2-input" placeholder="ยืนยันรหัสผ่านใหม่" style="background:#1e293b; color:#fff; border:1px solid #334155;">',
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: 'บันทึก',
-                cancelButtonText: 'ยกเลิก',
-                confirmButtonColor: '#2563eb',
-                preConfirm: () => {
-                    const oldPass = document.getElementById('oldPass').value;
-                    const newPass = document.getElementById('newPass').value;
-                    const confirmPass = document.getElementById('confirmPass').value;
-
-                    if (oldPass !== adminPassword) {
-                        Swal.showValidationMessage('รหัสผ่านเดิมไม่ถูกต้อง');
-                        return false;
-                    }
-                    if (!newPass || newPass.length < 4) {
-                        Swal.showValidationMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 4 ตัวอักษร');
-                        return false;
-                    }
-                    if (newPass !== confirmPass) {
-                        Swal.showValidationMessage('รหัสผ่านใหม่ไม่ตรงกัน');
-                        return false;
-                    }
-                    return newPass;
-                }
-            });
-
-            if (formValues) {
-                adminPassword = formValues;
-                localStorage.setItem('firstaid_admin_pass', adminPassword);
-                Swal.fire({ icon: 'success', title: 'เปลี่ยนรหัสผ่านสำเร็จ!', background: '#090d16', color: '#fff', timer: 1500, showConfirmButton: false });
-            }
         }
 
         function renderUserInventory() {
