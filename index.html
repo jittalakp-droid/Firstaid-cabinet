@@ -116,11 +116,11 @@
                         <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-400 border border-purple-500/30">Admin Panel</span>
                         <h2 class="text-lg sm:text-2xl font-bold text-white mt-1">ระบบจัดการหลังบ้านตู้ยา</h2>
                     </div>
-                    <div class="grid grid-cols-2 sm:flex flex-wrap gap-1.5 w-full sm:w-auto">
-                        <button onclick="switchAdminTab('overview')" id="tabOverview" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition text-center">ภาพรวม</button>
-                        <button onclick="switchAdminTab('cabinet')" id="tabCabinet" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-700 text-slate-300 transition text-center">ตู้ยาชั้น 2</button>
-                        <button onclick="switchAdminTab('central')" id="tabCentral" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-700 text-slate-300 transition text-center">คลังกลาง</button>
-                        <button onclick="switchAdminTab('history')" id="tabHistory" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-700 text-slate-300 transition text-center">ประวัติเบิก</button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            + เพิ่มรายการยาใหม่
+                        </button>
                     </div>
                 </div>
 
@@ -140,23 +140,76 @@
                             <h3 id="statCentralTotal" class="text-2xl font-bold text-blue-400 mt-1">0</h3>
                         </div>
                     </div>
-                </div>
 
-                <!-- TAB: CABINET & CENTRAL & HISTORY (ใส่โครงเดิมของคุณได้เลย) -->
-                <div id="adminSectionCabinet" class="pt-6 hidden">...</div>
-                <div id="adminSectionCentral" class="pt-6 hidden">...</div>
-                <div id="adminSectionHistory" class="pt-6 hidden">...</div>
+                    <!-- ตารางแสดงรายการยาหลังบ้าน -->
+                    <div class="bg-slate-900/40 border border-slate-700/60 rounded-2xl p-4 mt-6">
+                        <h3 class="text-base font-bold text-white mb-4">รายการยาในระบบทั้งหมด</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                                <thead class="bg-slate-900 uppercase text-slate-400 border-b border-slate-700">
+                                    <tr>
+                                        <th class="py-3 px-3">รหัสยา</th>
+                                        <th class="py-3 px-3">ชื่อรายการยา</th>
+                                        <th class="py-3 px-3">ล็อต (Lot)</th>
+                                        <th class="py-3 px-3 text-center">จำนวนคงเหลือ</th>
+                                        <th class="py-3 px-3">วันหมดอายุ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminInventoryTable" class="divide-y divide-slate-700/50">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- JavaScript Logic เชื่อมต่อ Google Sheets -->
+    <!-- MODAL: ADD NEW DRUG -->
+    <div id="drugModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <h3 class="text-base sm:text-lg font-bold text-white">เพิ่มรายการยาใหม่ (ลง Google Sheet)</h3>
+            <form id="drugForm" onsubmit="saveDrug(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">รหัสยา (Drug ID)</label>
+                    <input type="text" id="drugIdInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น DRG001">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">ชื่อรายการยา / เวชภัณฑ์</label>
+                    <input type="text" id="drugNameInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น พาราเซตามอล 500 มก.">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">เลขที่ล็อต (Lot No.)</label>
+                    <input type="text" id="drugLotInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="เช่น LOT2026-01">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">จำนวนเริ่มต้น</label>
+                        <input type="number" id="drugQtyInput" min="1" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">ขั้นต่ำเตือน (Min Stock)</label>
+                        <input type="number" id="drugMinInput" min="1" value="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">วันหมดอายุ</label>
+                    <input type="date" id="drugExpiryInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeDrugModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-xs font-semibold text-slate-300">ยกเลิก</button>
+                    <button type="submit" id="saveDrugBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
-        // ** ใส่ Web App URL ที่ได้จากการ Deploy Google Apps Script ที่นี่ **
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
 
         let inventory = [];
-        let historyLogs = [];
         let adminPassword = '1234';
 
         window.onload = function() {
@@ -169,6 +222,7 @@
                 inventory = await response.json();
                 renderUserInventory();
                 populateBorrowDropdown();
+                renderAdminOverview();
             } catch (error) {
                 console.error('Error loading data:', error);
             }
@@ -200,11 +254,32 @@
             inventory.forEach(item => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-800/40">
-                        <td class="py-3 px-3 font-medium text-white">${item.name}</td>
-                        <td class="py-3 px-3 text-slate-400">${item.category}</td>
-                        <td class="py-3 px-3 text-center font-bold text-emerald-400">${item.cabinetQty}</td>
-                        <td class="py-3 px-3">${item.unit}</td>
-                        <td class="py-3 px-3 text-slate-400">${item.expiry}</td>
+                        <td class="py-3 px-3 font-medium text-white">${item.name} (Lot: ${item.lotNo})</td>
+                        <td class="py-3 px-3 text-slate-400">${item.id}</td>
+                        <td class="py-3 px-3 text-center font-bold text-emerald-400">${item.stock}</td>
+                        <td class="py-3 px-3">-</td>
+                        <td class="py-3 px-3 text-slate-400">${item.expiryDate}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderAdminOverview() {
+            document.getElementById('statTotalItems').innerText = inventory.length;
+            const totalStock = inventory.reduce((sum, i) => sum + i.stock, 0);
+            document.getElementById('statCabinetTotal').innerText = totalStock;
+            document.getElementById('statCentralTotal').innerText = "-";
+
+            const tbody = document.getElementById('adminInventoryTable');
+            tbody.innerHTML = '';
+            inventory.forEach(item => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/40">
+                        <td class="py-3 px-3 font-medium text-white">${item.id}</td>
+                        <td class="py-3 px-3 text-white">${item.name}</td>
+                        <td class="py-3 px-3 text-slate-400">${item.lotNo}</td>
+                        <td class="py-3 px-3 text-center font-bold text-emerald-400">${item.stock}</td>
+                        <td class="py-3 px-3 text-slate-400">${item.expiryDate}</td>
                     </tr>
                 `;
             });
@@ -214,28 +289,35 @@
             const select = document.getElementById('borrowItem');
             select.innerHTML = '<option value="">-- เลือกรายการ --</option>';
             inventory.forEach(item => {
-                if (item.cabinetQty > 0) {
-                    select.innerHTML += `<option value="${item.id}">${item.name} (ในตู้: ${item.cabinetQty} ${item.unit})</option>`;
+                if (item.stock > 0) {
+                    select.innerHTML += `<option value="${item.id}|${item.lotNo}">${item.name} (Lot: ${item.lotNo} | เหลือ: ${item.stock})</option>`;
                 }
             });
         }
 
-        async function handleBorrow(e) {
+        function openAddDrugModal() {
+            document.getElementById('drugForm').reset();
+            document.getElementById('drugModal').classList.remove('hidden');
+        }
+
+        function closeDrugModal() {
+            document.getElementById('drugModal').classList.add('hidden');
+        }
+
+        async function saveDrug(e) {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
+            const btn = document.getElementById('saveDrugBtn');
             btn.disabled = true;
             btn.innerText = 'กำลังบันทึก...';
 
             const payload = {
-                action: 'disburse_drug',
-                name: document.getElementById('borrowerName').value,
-                position: document.getElementById('borrowerPosition').value,
-                dept: document.getElementById('borrowerDept').value,
-                drugId: document.getElementById('borrowItem').value,
-                itemName: inventory.find(i => i.id == document.getElementById('borrowItem').value).name,
-                qty: parseInt(document.getElementById('borrowQty').value),
-                unit: inventory.find(i => i.id == document.getElementById('borrowItem').value).unit,
-                reason: document.getElementById('borrowerReason').value
+                action: 'add_drug',
+                drugId: document.getElementById('drugIdInput').value.trim(),
+                drugName: document.getElementById('drugNameInput').value.trim(),
+                lotNo: document.getElementById('drugLotInput').value.trim(),
+                expiryDate: document.getElementById('drugExpiryInput').value,
+                quantity: parseInt(document.getElementById('drugQtyInput').value),
+                minStock: parseInt(document.getElementById('drugMinInput').value)
             };
 
             try {
@@ -246,9 +328,52 @@
                     body: JSON.stringify(payload)
                 });
 
-                Swal.fire({ icon: 'success', title: 'เบิกสำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
+                Swal.fire({ icon: 'success', title: 'เพิ่มยาลง Google Sheet สำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
+                closeDrugModal();
+                loadData(); // โหลดข้อมูลใหม่จาก Google Sheets
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({ icon: 'error', title: 'ไม่สามารถบันทึกได้', background: '#1e293b', color: '#fff' });
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'บันทึก';
+            }
+        }
+
+        async function handleBorrow(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = 'กำลังบันทึก...';
+
+            const selectedVal = document.getElementById('borrowItem').value.split('|');
+            const targetId = selectedVal[0];
+            const targetLot = selectedVal[1];
+            const targetItem = inventory.find(i => i.id === targetId && i.lotNo === targetLot);
+
+            const payload = {
+                action: 'disburse_drug',
+                drugId: targetId,
+                drugName: targetItem.name,
+                lotNo: targetLot,
+                expiryDate: targetItem.expiryDate,
+                qty: parseInt(document.getElementById('borrowQty').value),
+                requester: document.getElementById('borrowerName').value + ' (' + document.getElementById('borrowerPosition').value + ')',
+                department: document.getElementById('borrowerDept').value,
+                note: document.getElementById('borrowReason').value
+            };
+
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                Swal.fire({ icon: 'success', title: 'เบิกยาและตัดสต๊อกสำเร็จ!', background: '#1e293b', color: '#fff', timer: 1500, showConfirmButton: false });
                 document.getElementById('borrowForm').reset();
-                loadData(); // โหลดข้อมูลสต๊อกใหม่จาก Google Sheet
+                loadData(); // โหลดข้อมูลสต๊อกล่าสุดจาก Google Sheet
             } catch (error) {
                 Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', background: '#1e293b', color: '#fff' });
             } finally {
