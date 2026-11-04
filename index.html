@@ -101,12 +101,16 @@
         <!-- ADMIN VIEW -->
         <div id="adminView" class="hidden space-y-6">
             <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200">
+                
+                <!-- ส่วนหัวแอดมินสไตล์การ์ดอ้างอิง -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-600 border border-purple-200">Admin Panel</span>
-                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">ระบบจัดการหลังบ้าน</h2>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <span>🛠️</span> ระบบหลังบ้าน: จัดการรายการยา (Admin CRUD)
+                        </h2>
+                        <p class="text-slate-500 text-xs sm:text-sm mt-1">เพิ่ม แก้ไข หรือลบรายการยาในฐานข้อมูล</p>
                     </div>
-                    <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-lg shadow-blue-600/20">+ เพิ่มยาใหม่</button>
+                    <button onclick="openAddDrugModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm py-2.5 px-5 rounded-xl transition shadow-md shadow-amber-500/20 whitespace-nowrap">+ เพิ่มยาใหม่</button>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6">
@@ -128,18 +132,20 @@
                     <table class="w-full text-left text-xs sm:text-sm text-slate-700">
                         <thead class="bg-slate-100 text-slate-600 uppercase text-[11px] tracking-wider">
                             <tr>
+                                <th class="py-3 px-4">ไอคอน</th>
                                 <th class="py-3 px-4">รหัส / ชื่อยา</th>
                                 <th class="py-3 px-4">ล็อต (Lot)</th>
                                 <th class="py-3 px-4 text-center">ตู้ชั้น 2</th>
                                 <th class="py-3 px-4 text-center">คลังกลาง</th>
-                                <th class="py-3 px-4 text-center">จัดการ (ย้ายมาตู้)</th>
+                                <th class="py-3 px-4 text-center">ย้ายเข้าตู้</th>
+                                <th class="py-3 px-4 text-center">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody id="adminInventoryTable" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
 
-                <!-- ย้ายการ์ดเปลี่ยนรหัสผ่านแอดมินมาไว้ด้านล่าง -->
+                <!-- การ์ดเปลี่ยนรหัสผ่านแอดมิน -->
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 sm:p-6 shadow-sm text-slate-900 space-y-3 mt-6">
                     <div class="flex items-center gap-2">
                         <span class="text-xl">🔑</span>
@@ -192,7 +198,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-3">
                     <button type="button" onclick="closeDrugModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs text-slate-700">ยกเลิก</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white shadow-lg shadow-blue-600/30">บันทึกข้อมูล</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white shadow-md shadow-blue-600/30">บันทึกข้อมูล</button>
                 </div>
             </form>
         </div>
@@ -200,7 +206,7 @@
 
     <!-- JS Logic -->
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVjE3sPcv3muM6amhm5pIgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxlVtLcBbuk4YQ/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
         
         let inventory = [];
         let adminPassword = localStorage.getItem('firstaid_admin_pass') || '1234';
@@ -286,17 +292,30 @@
 
             const tbody = document.getElementById('adminInventoryTable');
             if(inventory.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">ไม่มีข้อมูลยาในระบบ</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-center text-slate-400">ไม่มีข้อมูลยาในระบบ</td></tr>`;
                 return;
             }
             tbody.innerHTML = inventory.map(i => `
                 <tr class="hover:bg-slate-50 transition">
+                    <td class="py-3 px-4">
+                        <div class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        </div>
+                    </td>
                     <td class="py-3 px-4 text-slate-900 font-medium">${i.name}<br><span class="text-[11px] text-slate-400">ID: ${i.id}</span></td>
                     <td class="py-3 px-4 text-slate-600">${i.lotNo}</td>
                     <td class="py-3 px-4 text-center font-bold text-emerald-600">${i.cabinetQty}</td>
                     <td class="py-3 px-4 text-center font-bold text-blue-600">${i.centralQty}</td>
                     <td class="py-3 px-4 text-center">
                         <button onclick="transferDrug('${i.id}', '${i.lotNo}', ${i.centralQty})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition shadow-md shadow-emerald-600/20">ย้ายเข้าตู้</button>
+                    </td>
+                    <td class="py-3 px-4 text-center space-x-1">
+                        <button onclick="editDrug('${i.id}', '${i.lotNo}', '${i.name}', ${i.cabinetQty}, ${i.centralQty}, '${i.expiryDate}')" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-xl transition border border-blue-200" title="แก้ไข">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </button>
+                        <button onclick="deleteDrug('${i.id}', '${i.lotNo}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 p-2 rounded-xl transition border border-rose-200" title="ลบ">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
                     </td>
                 </tr>
             `).join('');
@@ -336,6 +355,63 @@
                 const payload = { action: 'transfer_drug', drugId: id, lotNo: lot, qty: parseInt(qty) };
                 await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
                 Swal.fire({ icon: 'success', title: 'ย้ายยาเข้าตู้สำเร็จ', background: '#fff', color: '#1e293b', timer: 1200, showConfirmButton: false });
+                loadData();
+            }
+        }
+
+        async function editDrug(id, lot, name, cabinet, central, expiry) {
+            const { value: formValues } = await Swal.fire({
+                title: 'แก้ไขข้อมูลยา',
+                background: '#fff', color: '#1e293b',
+                html:
+                    `<div style="text-align:left; font-size:13px; margin-bottom:4px;">ชื่อยา:</div>` +
+                    `<input id="editName" class="swal2-input" value="${name}" style="margin:0 0 10px 0; width:90%;">` +
+                    `<div style="text-align:left; font-size:13px; margin-bottom:4px;">ตู้ชั้น 2:</div>` +
+                    `<input id="editCabinet" type="number" class="swal2-input" value="${cabinet}" style="margin:0 0 10px 0; width:90%;">` +
+                    `<div style="text-align:left; font-size:13px; margin-bottom:4px;">คลังกลาง:</div>` +
+                    `<input id="editCentral" type="number" class="swal2-input" value="${central}" style="margin:0 0 10px 0; width:90%;">` +
+                    `<div style="text-align:left; font-size:13px; margin-bottom:4px;">วันหมดอายุ:</div>` +
+                    `<input id="editExpiry" type="date" class="swal2-input" value="${expiry}" style="margin:0 0 10px 0; width:90%;">`,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#2563eb',
+                preConfirm: () => {
+                    return {
+                        drugName: document.getElementById('editName').value,
+                        cabinetQty: parseInt(document.getElementById('editCabinet').value),
+                        centralQty: parseInt(document.getElementById('editCentral').value),
+                        expiryDate: document.getElementById('editExpiry').value
+                    }
+                }
+            });
+
+            if (formValues) {
+                const payload = { action: 'edit_drug', drugId: id, lotNo: lot, ...formValues };
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                Swal.fire({ icon: 'success', title: 'แก้ไขข้อมูลสำเร็จ', background: '#fff', color: '#1e293b', timer: 1200, showConfirmButton: false });
+                loadData();
+            }
+        }
+
+        async function deleteDrug(id, lot) {
+            const confirm = await Swal.fire({
+                title: 'ยืนยันการลบยา?',
+                text: `คุณต้องการลบรายการยารหัส ${id} ล็อต ${lot} ออกจากระบบใช่หรือไม่?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'ใช่, ลบเลย',
+                cancelButtonText: 'ยกเลิก',
+                background: '#fff', color: '#1e293b'
+            });
+
+            if (confirm.isConfirmed) {
+                const payload = { action: 'delete_drug', drugId: id, lotNo: lot };
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                Swal.fire({ icon: 'success', title: 'ลบรายการยาสำเร็จ', background: '#fff', color: '#1e293b', timer: 1200, showConfirmButton: false });
                 loadData();
             }
         }
