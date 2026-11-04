@@ -109,19 +109,6 @@
                     <button onclick="openAddDrugModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-lg shadow-blue-600/20">+ เพิ่มยาใหม่</button>
                 </div>
 
-                <!-- การ์ดเปลี่ยนรหัสผ่านแอดมิน -->
-                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 sm:p-6 shadow-sm text-slate-900 space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl">🔑</span>
-                        <h3 class="font-bold text-base text-amber-900">เปลี่ยนรหัสผ่านผู้ดูแลระบบ (Admin Password)</h3>
-                    </div>
-                    <p class="text-xs text-amber-800">รหัสผ่านเริ่มต้นปัจจุบันคือ: <span class="font-bold bg-amber-100 px-2 py-0.5 rounded border border-amber-300 text-amber-900" id="currentDefaultPass">1234</span></p>
-                    <div class="flex flex-col sm:flex-row gap-3 pt-1">
-                        <input type="password" id="newAdminPassword" placeholder="รหัสผ่านใหม่..." class="flex-grow bg-white border border-amber-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
-                        <button onclick="updateAdminPassword()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-md whitespace-nowrap">บันทึกรหัสผ่านใหม่</button>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6">
                     <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                         <p class="text-xs text-slate-500">รายการยาทั้งหมด</p>
@@ -151,6 +138,20 @@
                         <tbody id="adminInventoryTable" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
+
+                <!-- ย้ายการ์ดเปลี่ยนรหัสผ่านแอดมินมาไว้ด้านล่าง -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 sm:p-6 shadow-sm text-slate-900 space-y-3 mt-6">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🔑</span>
+                        <h3 class="font-bold text-base text-amber-900">เปลี่ยนรหัสผ่านผู้ดูแลระบบ (Admin Password)</h3>
+                    </div>
+                    <p class="text-xs text-amber-800">รหัสผ่านเริ่มต้นปัจจุบันคือ: <span class="font-bold bg-amber-100 px-2 py-0.5 rounded border border-amber-300 text-amber-900" id="currentDefaultPass">1234</span></p>
+                    <div class="flex flex-col sm:flex-row gap-3 pt-1">
+                        <input type="password" id="newAdminPassword" placeholder="รหัสผ่านใหม่..." class="flex-grow bg-white border border-amber-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-600">
+                        <button onclick="updateAdminPassword()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-md whitespace-nowrap">บันทึกรหัสผ่านใหม่</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>
@@ -191,7 +192,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-3">
                     <button type="button" onclick="closeDrugModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs text-slate-700">ยกเลิก</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white shadow-md shadow-blue-600/30">บันทึกข้อมูล</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold text-white shadow-lg shadow-blue-600/30">บันทึกข้อมูล</button>
                 </div>
             </form>
         </div>
@@ -199,7 +200,7 @@
 
     <!-- JS Logic -->
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVjE3sPcv3muM6amhm5pIgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxlVtLcBbuk4YQ/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJe3sPcv3muM6amhm5plgLJk_o-78y_2Ep64M08CfCDBXwSV521NcNxIVtLCbbuk4YQ/exec";
         
         let inventory = [];
         let adminPassword = localStorage.getItem('firstaid_admin_pass') || '1234';
